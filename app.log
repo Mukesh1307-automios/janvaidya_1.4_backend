@@ -1,0 +1,24 @@
+2025-07-07 18:35:35,362 - INFO - Transaction committed.
+2025-07-07 18:36:02,475 - ERROR - Transaction rolled back: 401: Invalid credentials
+2025-07-07 18:36:08,826 - INFO - Transaction committed.
+2025-07-07 18:57:22,113 - ERROR - Transaction rolled back: (psycopg2.errors.UndefinedColumn) column "name" does not exist
+LINE 1: SELECT DISTINCT name FROM protocols ORDER BY name ASC
+                        ^
+
+[SQL: SELECT DISTINCT name FROM protocols ORDER BY name ASC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-07-07 19:07:22,093 - ERROR - Transaction rolled back: (psycopg2.errors.UndefinedColumn) column "name" does not exist
+LINE 1: ...LECT DISTINCT protocol_name FROM protocols ORDER BY name ASC
+                                                               ^
+
+[SQL: SELECT DISTINCT protocol_name FROM protocols ORDER BY name ASC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-07-07 19:07:28,195 - ERROR - Transaction rolled back: (psycopg2.errors.UndefinedColumn) column "name" does not exist
+LINE 1: ...LECT DISTINCT protocol_name FROM protocols ORDER BY name ASC
+                                                               ^
+
+[SQL: SELECT DISTINCT protocol_name FROM protocols ORDER BY name ASC]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-07-07 19:07:44,598 - INFO - Transaction committed.
+2025-07-07 19:07:50,715 - INFO - Transaction committed.
+2025-07-07 19:07:52,602 - INFO - Transaction committed.

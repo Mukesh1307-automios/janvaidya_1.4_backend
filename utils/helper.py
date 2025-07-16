@@ -1,6 +1,6 @@
 from pathlib import Path
 import logging
-from fastapi import HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status, Request
 
 from typing import List, Dict, Any
 import json
@@ -12,13 +12,64 @@ from langchain.prompts import PromptTemplate
 from langchain_ollama import ChatOllama
 from sqlalchemy import text
 
-# Setup logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
-
 # Import prompts (you'll need to create this file)
 from api.routes.user.AI_qna.prompt import QUESTIONS_ONLY_PROMPT
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+from jose import JWTError, jwt
+from core.config import Settings
+import json
+from sqlalchemy.ext.declarative import declarative_base
 
+
+Base=declarative_base()
+
+security = HTTPBearer()
+
+settings = Settings()
+# Logging configuration
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('app.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+
+async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(security)) -> dict:
+    """Dependency to get current authenticated user"""
+    try:
+        token = credentials.credentials
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        
+        if not payload:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Could not validate credentials"
+            )
+        
+        user_id = payload.get("sub")
+        email = payload.get("email")
+        
+        if not user_id or not email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token payload"
+            )
+            
+        return {
+            "user_id": user_id,
+            "email": email
+        }
+        
+    except JWTError as e:
+        logger.error(f"JWT validation error: {str(e)}")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Could not validate credentials"
+        )
 
 
 def get_file_type(filename: str) -> str:

@@ -71,8 +71,21 @@ class TokenResponse(BaseModel):
     expires_at: str
     user_exists: bool
     user_details: dict
+    
+class QuestionCreate(BaseModel):
+    protocol_name: str
+    age_group: str
+    gender: str
+    q_tag : str
+    question: str
+    options: List[str] = Field(..., min_items=1)
 
-
+class QuestionUpdate(BaseModel):
+    question: Optional[str] = None
+    age_group: Optional[str] = None
+    gender: Optional[str] = None
+    options: Optional[List[str]] = None
+    
 class Option(BaseModel):
     option_id: int
     opt_value: str

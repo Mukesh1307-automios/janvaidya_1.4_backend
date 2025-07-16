@@ -13,7 +13,7 @@ def list_protocols():
     """
     try:
         with get_db() as conn:
-            result = conn.execute(text("SELECT DISTINCT name FROM protocols ORDER BY name ASC"))
+            result = conn.execute(text("SELECT DISTINCT name FROM medapp.protocols ORDER BY name ASC"))
             protocol_names = [row[0] for row in result.fetchall()]
         return protocol_names
     except Exception as e:

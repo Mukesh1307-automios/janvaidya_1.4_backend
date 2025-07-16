@@ -37,7 +37,7 @@ engine = create_engine(settings.DATABASE_URL)
 
 
 
-router = APIRouter(prefix="/user/auth", tags=["Authentication"])
+router = APIRouter(prefix="/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=Response)

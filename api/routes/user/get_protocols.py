@@ -5,7 +5,7 @@ from db.database import get_db
 from typing import Annotated, List
 
 
-router = APIRouter(prefix='/user', tags=['Get Protocols'])
+router = APIRouter(prefix='/GET', tags=['Get Protocols'])
 @router.get("/protocols", response_model=List[str])
 def list_protocols():
     """

@@ -46,7 +46,7 @@ async def register_user(user: DoctorRegistration):
         with get_db() as conn:
             # Check if email already exists
             user_details = conn.execute(
-                text("SELECT doc_id, name FROM doctors WHERE email = :email"),
+                text("SELECT doc_id, name FROM medapp.doctors_vw WHERE email = :email"),
                 {"email": user.email}
             ).fetchone()
 
@@ -55,7 +55,7 @@ async def register_user(user: DoctorRegistration):
 
             # Insert new doctor (name + email) into doctors table
             insert_doctor_query = text("""
-                INSERT INTO doctors (name, email)
+                INSERT INTO medapp.doctors (name, email)
                 VALUES (:name, :email)
                 RETURNING doc_id
             """)
@@ -67,7 +67,7 @@ async def register_user(user: DoctorRegistration):
 
             # Insert password into doctors_password table
             insert_password_query = text("""
-                INSERT INTO doctors_password (doc_id, password)
+                INSERT INTO medapp.doctors_password (doc_id, password)
                 VALUES (:doc_id, :password)
             """)
             conn.execute(insert_password_query, {
@@ -95,8 +95,8 @@ async def login(validation: LoginValidation):
             user = db.execute(
                 text("""
                     SELECT d.doc_id, d.name, d.email
-                    FROM doctors d
-                    JOIN doctors_password dp ON d.doc_id = dp.doc_id
+                    FROM medapp.doctors_vw d
+                    JOIN medapp.doctors_password dp ON d.doc_id = dp.cred_doc_id
                     WHERE d.email = :email AND dp.password = :password
                 """),
                 {"email": validation.email, "password": validation.password}
